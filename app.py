@@ -3,6 +3,9 @@ import json
 import websockets
 import secrets
 
+import os
+import signal
+
 JOIN = {}
 
 async def send_messages(websocket, connected):
@@ -10,12 +13,6 @@ async def send_messages(websocket, connected):
     async for message in websocket:
         event = json.loads(message)
         websockets.broadcast(connected, json.dumps(event))
-    # while True:
-    #     try:
-    #         message = await websocket.recv()
-    #     except:
-    #         break
-    #     print(message)
 
 async def start(websocket, token):
     connected = {websocket}
@@ -38,8 +35,13 @@ async def join(websocket, token):
         connected.remove()
 
 async def main():
-    async with websockets.serve(handler, "", 8001):
-        await asyncio.Future()  # run forever
+    loop = asyncio.get_running_loop()
+    stop = loop.create_future()
+    loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
+
+    port = int(os.environ.get("PORT", "8001"))
+    async with websockets.serve(handler, "", port):
+        await stop
 
 async def handler(websocket, path):
     """
