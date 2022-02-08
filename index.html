@@ -1,12 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="utf-8" />
-    <title>Socks</title>
+    <title>Python Websockets Chat Demo</title>
+
   </head>
   <body>
-    <input type="text" id="message" />
-    <button id="button"></button>
-    <script src="main.js" type="module"></script>
+    <div class="container">
+     <div>
+         <label for="fx">
+             From X <select id="fx">
+                 <option value="0">0</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+                 <option value="4">4</option>
+                 <option value="5">5</option>
+                 <option value="6">6</option>
+                 <option value="7">7</option>
+             </select>
+         </label>
+     </div> 
+     <div>
+        <label for="fy">
+            From Y <select id="fy">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </label>
+    </div> 
+    <div>
+        <label for="tx">
+            To X <select id="tx">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </label>
+    </div> 
+    <div>
+        <label for="ty">
+            To Y <select id="ty">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </label>
+    </div> 
+    <div>Capturing
+        <input type="checkbox" id="capturing"/>
+    </div>
+    <button id="butt">Go</button>
+    </div>
+
+
+    <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
