@@ -1,4 +1,4 @@
-const websocket = new WebSocket('ws://localhost:8001/');
+const websocket = new WebSocket('wss://hermy-games-websockets.herokuapp.com/');
 const butt = document.querySelector('#butt');
 const fromX = document.querySelector('#fx');
 const fromY = document.querySelector('#fy');
@@ -6,7 +6,10 @@ const toX = document.querySelector('#tx');
 const toY = document.querySelector('#ty');
 const capturing = document.querySelector('#capturing');
 
-setTimeout(() => websocket.send(JSON.stringify({type: 'join', token: '2'})), 500);
+websocket.addEventListener('open', () => {
+  websocket.send(JSON.stringify({type: 'join', token: '2'}))
+})
+
 
 const reverse = (value) => {
   return Math.abs(Number(value) - 7);
