@@ -68,6 +68,10 @@ async def handler(websocket, path):
             # First player starts a new game.
             socket = Connection(event['id'], websocket)
             JOIN[socket.id] = socket
+            websockets.broadcast({websocket}, json.dumps({
+                "type": "players",
+                "players": [{"id": user.id, "in_game": user.in_game} for user in JOIN.values()],
+            }))
         
 async def join_game(websocket, player_1, player_2, event):
     
