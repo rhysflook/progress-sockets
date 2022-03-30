@@ -76,11 +76,24 @@ async def handler(websocket, path):
             JOIN[socket.id] = socket
 
         elif event['type'] == "chatMessage":
-            websockets.broadcast([user.websocket for user in JOIN.values()], json.dumps({
-                    'type': 'chatMessage',
-                    'sender': event['sender'],
-                    'content': event['content']
-                }))
+            if event['recipient_id'] == 0:
+                print('YES')
+                websockets.broadcast([user.websocket for user in JOIN.values() if user.id != event['id']], json.dumps({
+                        'type': 'chatMessage',
+                        'sender': event['sender'],
+                        'content': event['content']
+                    }))
+            else:
+                sockets = {websocket}
+                if event['recipient_id'] in JOIN.keys():
+                    sockets = {websocket, JOIN[event['recipient_id']].websocket}
+                websockets.broadcast(sockets, json.dumps({
+                        'type': 'chatMessage',
+                        'sender': event['sender'],
+                        'content': event['content']
+                    }))
+
+                    
 
         elif event['type'] == 'status':
             try:
