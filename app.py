@@ -63,15 +63,44 @@ async def handler(websocket, path):
             player_1 = JOIN[event["id"]]
             player_2 = JOIN[event["target"]]
             await join_game(websocket, player_1, player_2, event)
+        
+        elif event['type'] == 'get_friends':
+            websockets.broadcast({websocket}, json.dumps({
+                "type": "players",
+                "players": get_friends(event['ids']),
+            }))
 
         elif event["type"] == "start":
             # First player starts a new game.
             socket = Connection(event['id'], websocket)
             JOIN[socket.id] = socket
-            websockets.broadcast({websocket}, json.dumps({
-                "type": "players",
-                "players": {user.id: {"id": user.id, "in_game": user.in_game} for user in JOIN.values()},
-            }))
+
+        elif event['type'] == "chatMessage":
+            websockets.broadcast([user.websocket for user in JOIN.values()], json.dumps({
+                    'type': 'chatMessage',
+                    'sender': event['sender'],
+                    'content': event['content']
+                }))
+
+        elif event['type'] == 'status':
+            try:
+                user = JOIN[event['id']]
+                websockets.broadcast({websocket}, json.dumps({
+                    'type': 'newFriend',
+                    'id': event['id'],
+                    'name': event['name'],
+                    'online': True,
+                    'in_game': user.in_game
+                }))
+            except: 
+                websockets.broadcast({websocket}, json.dumps({
+                    'type': 'newFriend',
+                    'id': event['id'],
+                    'name': event['name'],
+                    'online': False,
+                    'in_game': False
+                }))
+
         
 async def join_game(websocket, player_1, player_2, event):
     
@@ -91,6 +120,9 @@ async def join_game(websocket, player_1, player_2, event):
         player_1.opponent = None
         player_2.in_game = False
         player_2.opponent = None 
+
+def get_friends(ids): 
+    return {JOIN[id].id: {"id": JOIN[id].id, "in_game": JOIN[id].in_game} for id in ids if id in JOIN.keys()}
 
 if __name__ == "__main__":
     asyncio.run(main())
