@@ -82,7 +82,8 @@ async def handler(websocket, path):
                         'type': 'chatMessage',
                         'sender': event['sender'],
                         'recipient_id': event['recipient_id'],
-                        'content': event['content']
+                        'content': event['content'],
+                        'sender_id': event['id']
                     }))
             else:
                 sockets = {websocket}
@@ -92,7 +93,8 @@ async def handler(websocket, path):
                         'type': 'chatMessage',
                         'sender': event['sender'],
                         'recipient_id': event['recipient_id'],
-                        'content': event['content']
+                        'content': event['content'],
+                        'sender_id': event['id']
                     }))
 
                     
