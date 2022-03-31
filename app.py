@@ -81,6 +81,7 @@ async def handler(websocket, path):
                 websockets.broadcast([user.websocket for user in JOIN.values() if user.id != event['id']], json.dumps({
                         'type': 'chatMessage',
                         'sender': event['sender'],
+                        'recipient_id': event['recipient_id'],
                         'content': event['content']
                     }))
             else:
@@ -90,6 +91,7 @@ async def handler(websocket, path):
                 websockets.broadcast(sockets, json.dumps({
                         'type': 'chatMessage',
                         'sender': event['sender'],
+                        'recipient_id': event['recipient_id'],
                         'content': event['content']
                     }))
 
