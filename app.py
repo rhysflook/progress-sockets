@@ -65,6 +65,7 @@ async def handler(websocket, path):
             await join_game(websocket, player_1, player_2, event)
         
         elif event['type'] == 'get_friends':
+            print(get_friends(event['ids']))
             websockets.broadcast({websocket}, json.dumps({
                 "type": "players",
                 "players": get_friends(event['ids']),
@@ -77,7 +78,7 @@ async def handler(websocket, path):
 
         elif event['type'] == "chatMessage":
             if event['recipient_id'] == 0:
-                print('YES')
+
                 websockets.broadcast([user.websocket for user in JOIN.values() if user.id != event['id']], json.dumps({
                         'type': 'chatMessage',
                         'sender': event['sender'],
@@ -139,6 +140,10 @@ async def join_game(websocket, player_1, player_2, event):
         player_2.opponent = None 
 
 def get_friends(ids): 
+    print(ids)
+    print(JOIN.keys())
+    for id in ids:
+        print(id)
     return {JOIN[id].id: {"id": JOIN[id].id, "in_game": JOIN[id].in_game} for id in ids if id in JOIN.keys()}
 
 if __name__ == "__main__":
