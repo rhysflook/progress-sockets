@@ -18,7 +18,7 @@ class Connection:
     
     def get_friends(self): 
 
-        friend_data = requests.get(f'https://dragon-king-games.herokuapp.com/backend/friends/getFriends.php?id={self.id}').json()
+        friend_data = requests.get(f'{os.environ['API_BASE_URL']}backend/friends/getFriends.php?id={self.id}').json()
         friends = {}
         for friend in friend_data:
             id, name = friend[0], friend[1]
@@ -35,7 +35,7 @@ class Connection:
         return friends
     
     def get_friends_sockets(self):
-        friend_data = requests.get(f'https://dragon-king-games.herokuapp.com/backend/friends/getFriends.php?id={self.id}').json()
+        friend_data = requests.get(f'{os.environ['API_BASE_URL']}backend/friends/getFriends.php?id={self.id}').json()
         return [JOIN[friend[0]].websocket for friend in friend_data if friend[0] in JOIN.keys()]
 
     def handle_login(self):
