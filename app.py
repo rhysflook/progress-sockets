@@ -18,7 +18,7 @@ class Connection:
     
     def get_friends(self): 
 
-        friend_data = requests.get(f'https://dragon-king-games.herokuapp.com/draughts/backend/friends/getFriends.php?id={self.id}').json()
+        friend_data = requests.get(f'https://dragon-king-games.herokuapp.com/backend/friends/getFriends.php?id={self.id}').json()
         friends = {}
         for friend in friend_data:
             id, name = friend[0], friend[1]
