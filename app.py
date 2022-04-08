@@ -65,7 +65,7 @@ class Connection:
         if self.active == False:
             friends = self.get_friends()
             websockets.broadcast(
-                [JOIN[id].websocket for id in friends.keys()], json.dumps({
+                [JOIN[id].websocket for id in friends.keys() if id in JOIN.keys()], json.dumps({
                     'type': 'logout',
                     'id': self.id,
                 })
