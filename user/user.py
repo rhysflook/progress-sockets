@@ -41,15 +41,16 @@ class User:
 
     def notify_opponent(self, is_returning=False):
         if is_returning:
-            websockets.broadcast([self.opponent.websocket], {
+            websockets.broadcast({self.opponent.websocket}, json.dumps({
                 'type': 'reconnect',
                 'id': self.id
-            })
+            }))
         else:
-            websockets.broadcast([self.opponent.websocket], {
+            websockets.broadcast({self.opponent.websocket}, json.dumps({
                 'type': 'disconnect',
                 'id': self.id
-            })
+            }))
+
     
     async def handle_disconnect(self):
         self.active = False
@@ -58,13 +59,19 @@ class User:
         await asyncio.sleep(30)
         if self.active == False:
             self.notify_friends('logout')
-            del self.app[self.id]
+            try:
+                del self.app[self.id]
+            except: 
+                print('Connection already closed')
 
-    def handle_reconnect(self, socket):
+
+    def handle_reconnect(self, socket, location):
         self.active = True
         self.websocket = socket
-        if self.in_game:
+        if self.in_game and location == 'game':
             self.notify_opponent(True)
+        else:
+            self.in_game = False
     
     def join_game(self, opponent):
         self.in_game = True

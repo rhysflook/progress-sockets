@@ -4,7 +4,7 @@ from user.user import User
 
 class Events:
     def __init__(self, websocket, app):
-        self.user = 0
+        self.user = None
         self.connection = None
         self.websocket = websocket
         self.app = app
@@ -21,16 +21,17 @@ class Events:
         id = event['id']
         if id in self.app.keys():
             self.user = self.app[id]
-            self.user.handle_reconnect(self.websocket)
+            self.user.handle_reconnect(self.websocket, event['location'])
         else:       
             self.user = User(id, self.websocket, self.app)
             self.app[id] = self.user
             self.user.handle_login()
+
         self.broadcast({self.websocket}, 'friends', friends=self.user.get_friends())
 
     def accept(self, event):
+        print('joining')
         self.user.join_game(self.app[event['opponent']])
-
         self.broadcast({self.user.opponent.websocket}, 'accept', **event)
 
     def invite(self, event):
