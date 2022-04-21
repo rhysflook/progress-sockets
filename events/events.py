@@ -57,8 +57,9 @@ class Events:
 
     def send_to_specific(self, event):
         if event['recipient_id'] in self.app.keys():
+  
             self.broadcast(
-                self.app[event['recipient_id']].websocket,
+                [self.app[event['recipient_id']].websocket],
                 'chatMessage', **self.get_message_kwargs(event)
             )
 

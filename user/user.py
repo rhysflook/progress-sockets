@@ -53,6 +53,7 @@ class User:
 
     
     async def handle_disconnect(self):
+        print(self.app)
         self.active = False
         if self.in_game:
             self.notify_opponent()
@@ -60,6 +61,7 @@ class User:
         if self.active == False:
             self.notify_friends('logout')
             try:
+                print(self.app)
                 del self.app[self.id]
             except: 
                 print('Connection already closed')
