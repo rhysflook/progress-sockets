@@ -75,7 +75,7 @@ class Events:
         id, name = event['id'], event['name']
         is_online = event['id'] in self.app.keys()
         self.broadcast(
-            self.websocket, 'newFriend', id=id, name=name,
+            [self.websocket], 'newFriend', id=id, name=name,
             online=is_online,
             in_game=False if not is_online else self.app[id].in_game
         )
